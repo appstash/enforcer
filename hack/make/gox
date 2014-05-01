@@ -1,0 +1,8 @@
+#!/bin/bash
+
+DEST=$1
+
+go get
+
+rm -rf bundles/$VERSION
+gox -output="$DEST/{{.OS}}/{{.Arch}}/enforcer-$VERSION"

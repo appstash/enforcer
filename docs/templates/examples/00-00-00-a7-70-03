@@ -1,0 +1,19 @@
+#!ipxe
+#imgfree
+
+
+set mirror ftp.ds.hj.se
+set version 2014.02.01
+
+
+set dns 
+set script http://raw.github.com/pandrew/arks/master/profile/mercury
+set append "archiso_http_srv=http://${mirror}/pub/os/linux/archlinux/iso/${version}/ archisobasedir=arch checksum=y ip=dhcp script=${script}"
+set kernel "http://${mirror}/pub/os/linux/archlinux/iso/${version}/arch/boot/x86_64/vmlinuz"
+set initrd "http://${mirror}/pub/os/linux/archlinux/iso/${version}/arch/boot/x86_64/archiso.img"
+
+
+imgfree
+kernel ${kernel} ${append}
+initrd ${initrd}
+boot

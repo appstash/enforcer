@@ -1,0 +1,18 @@
+#!ipxe
+{{range .}}
+
+
+set lw http://pi.home.lan:8080/windows/windows81/
+kernel http://pi.home.lan:8080/bins/wimboot
+initrd ${lw}bootmgr                      bootmgr
+initrd ${lw}boot/bootmgr.exe             bootmgr.exe
+initrd ${lw}boot/bcd                     BCD
+initrd ${lw}boot/fonts/segmono_boot.ttf  segmono_boot.ttf
+initrd ${lw}boot/fonts/segoe_slboot.ttf  segoe_slboot.ttf
+initrd ${lw}boot/fonts/segoen_slboot.ttf segoen_slboot.ttf
+initrd ${lw}boot/fonts/wgl4_boot.ttf     wgl4_boot.ttf
+initrd ${lw}boot/boot.sdi                boot.sdi
+initrd ${lw}sources/boot.wim             boot.wim
+imgstat
+boot
+{{end}}

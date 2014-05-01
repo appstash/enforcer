@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+
+PKGVERSION="$VERSION"
+if [ -n "$(git status --porcelain)" ]; then
+    PKGVERSION="$PKGVERSION-$(date +%Y%m%d%H%M%S)-$GITCOMMIT"
+fi
+
+PACKAGE_ARCHITECTURE="$(dpkg-architecture -qDEB_HOST_ARCH)"
+PACKAGE_URL="github.com/appstash/enforcer"
+PACKAGE_MAINTAINER="hello@appstash.io"
+PACKAGE_DESCRIPTION="ipmi server"
+PACKAGE_LICENSE="Apache-2.0"
+
+bundle_content() {
+    DIR=content/build
+
+    #mkdir -p $DEST/build/opt/enforcer
+    cp -r static $DIR/opt/enforcer
+    cp -r ipxe $DIR/opt/enforcer
+    cp -r html $DIR/opt/enforcer
+
+    cd $DEST
+    fpm -s dir -C $DIR \
+        --name enforcer-content --version $PKGVERSION \
+        --description "$PACKAGE_DESCRIPTION" \
+        --maintainer "$PACKAGE_MAINTAINER" \
+        --provides enforcer-content \
+        --url "$PACKAGE_URL" \
+        --license "$PACKAGE_LICENSE" \
+        --deb-compression gz \
+        -t deb .
+	
+}
+
+bundle_content

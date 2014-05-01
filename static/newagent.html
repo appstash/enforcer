@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+
+    <title>Enforcer / New Node</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link href="plugins/parsley/parsley.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="css/dashboard.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+<header class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/"><i class="fa fa-desktop"></i> Enforcer</a>
+        </div>
+        <div class="navbar-collapse collapse">
+
+
+             <ul class="nav navbar-nav">
+                <li>
+                    <a href="#">iPXE</a>
+                </li>
+                <li>
+                    <a href="/cluster">Cluster</a>
+                </li>
+            </ul>
+
+
+            <ul class="nav navbar-nav navbar-right">
+                  </div>
+                </li>
+            </ul>
+        </div><!--/.navbar-collapse -->
+    </div>
+</header>
+
+
+
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3 col-md-2 sidebar">
+                <ul class="nav nav-sidebar">
+                    <li class="active"><a href="/"><i class="fa fa-arrow-circle-o-left"></i> Nodes</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <ol class="breadcrumb">
+            <li>New Node</li>
+            <li class="active">Configuration</li>
+            </ol>
+
+    
+
+
+
+                                        <form parsley-validate method="POST" action="/add/agent" class="form-horizontal row-border" data-validate="parsley" id="validate-form" />
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Connection name:</label>
+                                                <div class="col-sm-6">
+                                                    <input  type="text" name="id" parsley-trigger="change" parsley-regexp=".{1,20}$" placeholder="Example: localhost" required="required" class="form-control" />
+                                                </div>
+                                            </div>
+
+
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Ip address:</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" name="agentAddr" parsley-trigger="change" parsley-regexp="^((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]+)|(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]+))(:[0-9]+)$" placeholder="Ipv4 or Ipv6 address plus port" required="required" class="form-control" /> 
+                                                </div>
+                                            </div>
+
+
+
+                                            <div class="col-sm-6 col-sm-offset-3">
+                                                <div class="btn-toolbar">
+                                                    <button class="btn-primary btn" onclick="javascript:$('#validate-form').parsley( 'validate' );">Submit</button>
+                                                    <button class="btn-default btn" onclick="javascript:$('#collapseDiv').collapse('toggle');">Cancel</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    
+                                
+
+                                        
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="plugins/parsley/parsley.js"></script>
+    <script src="plugins/autosize/jquery.autosize.min.js"></script>
+    <script src="js/enforcer-ui.js"></script>
+    <script src="plugins/form-validation/jquery.validate.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/docs.min.js"></script>
+    
+  </body>
+</html>
+

@@ -1,0 +1,23 @@
+#!ipxe
+#imgfree
+
+{{range .}}
+
+echo  Id: {{.Id}}
+echo MAC: ${net0/mac}
+
+set mirror {{.Mirror}}
+set version {{.Version}}
+
+<!--Archlinux-->
+set dns {{.Dns}}
+set script {{.Script}}
+set append archiso_http_srv=http://${mirror}/archlinux/iso/${version}/ archisobasedir=arch checksum=y ip=dhcp script=${script}
+set kernel http://${mirror}/archlinux/iso/${version}/arch/boot/x86_64/vmlinuz
+set initrd http://${mirror}/archlinux/iso/${version}/arch/boot/x86_64/archiso.img
+
+{{end}}
+imgfree
+kernel ${kernel} ${append}
+initrd ${initrd}
+boot

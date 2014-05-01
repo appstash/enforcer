@@ -1,0 +1,19 @@
+#!ipxe
+#imgfree
+
+{{range .}}
+set mirror {{.Mirror}}
+set version {{.Version}}
+
+<!--Archlinux-->
+set dns {{.Dns}}
+set script {{.Script}}
+set append {{.Append}}
+set kernel {{.Kernel}}
+set initrd {{.Initrd}}
+
+{{end}}
+imgfree
+kernel ${kernel} ${append}
+initrd ${initrd}
+boot

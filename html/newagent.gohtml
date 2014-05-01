@@ -1,0 +1,275 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+
+    <title>Enforcer</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/dashboard.css" rel="stylesheet">
+	 <link href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css"></script>
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Enforcer</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Help</a></li>
+          </ul>
+          <form class="navbar-form navbar-right">
+            <input type="text" class="form-control" placeholder="Search...">
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li class="active"><a href="#">Overview</a></li>
+            <li><a href="#">New Node</a></li>
+            <li><a href="#">Analytics</a></li>
+            <li><a href="#">Export</a></li>
+          </ul>
+          <ul class="nav nav-sidebar">
+            <li><a href="">Nav item</a></li>
+            <li><a href="">Nav item again</a></li>
+            <li><a href="">One more nav</a></li>
+            <li><a href="">Another nav item</a></li>
+            <li><a href="">More navigation</a></li>
+          </ul>
+          <ul class="nav nav-sidebar">
+            <li><a href="">Nav item again</a></li>
+            <li><a href="">One more nav</a></li>
+            <li><a href="">Another nav item</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header">Enforcer</h1>
+    
+    <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                    <div class="panel gray">
+                        <div class="panel-heading">
+                            <h4>Machines</h4>
+
+                            <div class="options">
+                                <ul class="nav nav-tabs">
+                                    <li><a href="#collapseDiv" data-toggle="tab" ><i class="icon-plus"></i> New Machine</a></li>
+                                    <li class="active"><a href="/#home1" data-toggle="tab"><i class="icon-home"></i> My Machines</a></li>
+                                </ul>
+                            </div> <!--options-->
+                        </div> <!--panel-heading-->
+                        <div class="panel-body collapse in">
+                            <div class="tab-content">
+
+                                <div class="tab-pane" id="collapseDiv">
+
+
+                                        <form  method="POST" action="/newnode" class="form-horizontal row-border" data-validate="parsley" id="validate-form" />
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Id</label>
+                                                <div class="col-sm-6">
+                                                    <input  type="text" name="id"  data-regexp="^([0-9a-f]{2}[-]){5}([0-9a-f]{2})$" placeholder="Example: 00-00-01-02-03-04" required="required" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Tags</label>
+                                                <div class="col-sm-6">
+                                                    <input type="hidden" id="e12" style="width:100%" name="tags"  />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Description</label>
+                                                <div class="col-sm-6">
+                                                    <textarea  name="description" type="text" class="form-control autosize"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Management ip</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" name="mgm" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Ip</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" name="ip" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Netmask</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" name="netmask" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Gateway</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" name="gateway" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Dns</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" name="dns" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Template</label>
+                                                <div class="col-sm-6">
+                                                    <input name="template" type="text" placeholder="Required Field" required="required" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Version</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" name="version" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Kernel</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" name="kernel" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Mirror</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" name="mirror" class="form-control" />
+                                            </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Append</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" name="append" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label">Initrd</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" name="initrd" class="form-control" />
+                                                </div>
+                                            </div>
+                                             <div class="form-group">
+                                                <label class="col-sm-3 control-label">Script</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" name="script" class="form-control" />
+                                                </div>
+                                            </div>
+
+
+                                            <div class="panel-footer">
+                                                <div class="row">
+                                                    <div class="col-sm-6 col-sm-offset-3">
+                                                        <div class="btn-toolbar">
+                                                            <button class="btn-primary btn" onclick="javascript:$('#validate-form').parsley( 'validate' );">Submit</button>
+                                                            <button class="btn-default btn" onclick="javascript:$('#collapseDiv').collapse('toggle');">Cancel</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                </div>
+
+          <div class="row placeholders">
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img data-src="holder.js/200x200/auto/sky" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>Label</h4>
+              <span class="text-muted">Something else</span>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img data-src="holder.js/200x200/auto/vine" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>Label</h4>
+              <span class="text-muted">Something else</span>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img data-src="holder.js/200x200/auto/sky" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>Label</h4>
+              <span class="text-muted">Something else</span>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img data-src="holder.js/200x200/auto/vine" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>Label</h4>
+              <span class="text-muted">Something else</span>
+            </div>
+          </div>
+
+          <h2 class="sub-header">Nodes</h2>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>Description</th>
+                  <th>Template</th>
+                  <th>Owner</th>
+                  <th>Tags</th>
+                  <th>Status</th>
+					
+                </tr>
+              </thead>
+				{{range .}}
+				<!-- Each row should be clickable -->
+              <tbody>
+				 <tr>
+				  <td><a href="/view/{{.Id}}" data-toggle="modal">{{.Id}}</a></td>
+				  <td>{{.Description}}</td>
+				  <td>{{.Template}}</td>
+				  <td>{{.Owner}}</td>
+				  <td><a href="#" class="btn btn-default btn-xs">{{.Tags}}</a></td>
+				  <td><a href="/toggle/{{.Id}}" class="label label-{{.Status}}">{{.Status}}</a></td>
+				  <td><a href="/delete/{{.Id}}" class="icon-remove"></i></a></td>
+			  	</tr>
+              </tbody>
+		  		{{end}}
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/docs.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+  </body>
+</html>
+

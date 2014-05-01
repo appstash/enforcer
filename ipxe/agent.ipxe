@@ -1,0 +1,13 @@
+#!ipxe
+#imgfree
+
+set append loglevel=3 user=docker console=ttyS0 console=tty nomodeset norestore base script=${script}
+set kernel http://192.168.3.3:4321/repo/vmlinuz64
+set initrd http://192.168.3.3:4321/repo/initrd.img
+
+
+
+imgfree
+kernel ${kernel} ${append}
+initrd ${initrd}
+boot

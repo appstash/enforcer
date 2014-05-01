@@ -1,0 +1,8 @@
+#!ipxe
+{{range .}}
+imgfree
+dhcp
+initrd http://pi.home.lan:8080/mac/res.iso
+chain http://pi.home.lan:8080/mac/memdisk iso raw
+boot
+{{end}}

@@ -1,0 +1,88 @@
+.mod-label {
+  display: inline;
+  padding: .2em .6em .3em;
+  font-size: 75%;
+  font-weight: bold;
+  line-height: 1;
+  color: #ffffff !important;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: .25em;
+}
+.mod-label[href]:hover,
+.mod-label[href]:focus {
+  color: #ffffff;
+  text-decoration: none;
+  cursor: pointer;
+}
+.mod-label:empty {
+  display: none;
+}
+.btn .mod-label {
+  position: relative;
+  top: -1px;
+}
+.label-default {
+  background-color: #999999;
+}
+.label-default[href]:hover,
+.label-default[href]:focus {
+  background-color: #808080;
+}
+.label-primary {
+  background-color: #428bca;
+}
+.label-primary[href]:hover,
+.label-primary[href]:focus {
+  background-color: #3071a9;
+}
+.label-INSTALLED {
+  background-color: #5cb85c;
+}
+.label-INSTALLED[href]:hover,
+.label-INSTALLED[href]:focus {
+  background-color: #449d44;
+}
+.label-UNAVAILABLE {
+  background-color: #5bc0de;
+}
+.label-UNAVAILABLE[href]:hover,
+.label-UNAVAILABLE[href]:focus {
+  background-color: #31b0d5;
+}
+.label-FAILED {
+  background-color: #5bc0de;
+}
+.label-FAILED[href]:hover,
+.label-FAILED[href]:focus {
+  background-color: #31b0d5;
+}
+.label-warning {
+  background-color: #f0ad4e;
+}
+.label-warning[href]:hover,
+.label-warning[href]:focus {
+  background-color: #ec971f;
+}
+.label-LEFT {
+  background-color: #f0ad4e;
+}
+.label-LEFT[href]:hover,
+.label-LEFT[href]:focus {
+  background-color: #ec971f;
+}
+.label-AVAILABLE {
+  background-color: #d9534f;
+}
+.label-AVAILABLE[href]:hover,
+.label-AVAILABLE[href]:focus {
+  background-color: #c9302c;
+}
+.label-ALIVE {
+  background-color: #d9534f;
+}
+.label-ALIVE[href]:hover,
+.label-ALIVE[href]:focus {
+  background-color: #c9302c;
+}
