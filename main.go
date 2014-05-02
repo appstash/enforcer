@@ -31,7 +31,7 @@ func realMain() int {
 	cli := &cli.CLI{
 		Args:     args,
 		Commands: Commands,
-		HelpFunc: cli.BasicHelpFunc("consul"),
+		HelpFunc: cli.BasicHelpFunc("enforcer"),
 	}
 
 	exitCode, err := cli.Run()
