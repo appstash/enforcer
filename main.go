@@ -1,55 +1,44 @@
 package main
 
 import (
-	// "flag"
-	flag "github.com/dotcloud/docker/pkg/mflag"
+	"fmt"
+	"github.com/mitchellh/cli"
+	"io/ioutil"
 	"log"
+	"os"
 )
 
 func main() {
-	var (
-		addr, dbaddr          string
-		tls, daemon, debug, h bool
-		tables                []string
-	)
-	
-	flag.StringVar(&addr, []string{"addr", "-addr"}, "localhost:4321", "Defaults to 127.0.0.1:4321")
-	flag.StringVar(&dbaddr, []string{"dbaddr", "-db"}, "localhost:28015", "Defaults to localhost:28015")
-	flag.BoolVar(&daemon, []string{"d"}, false, "Tells enforcer to be act as a web app")
-	flag.BoolVar(&debug, []string{"debug"}, false, "Enable debugging")
-	flag.BoolVar(&tls, []string{"tls"}, false, "use tls")
-	flag.BoolVar(&h, []string{"h", "#help", "-help"}, false, "display the help")
-	flag.Parse()
+	os.Exit(realMain())
+}
 
-	server := NewServer(addr)
-	if h {
-		flag.PrintDefaults()
-	} else if daemon {
+func realMain() int {
+	log.SetOutput(ioutil.Discard)
 
-		createConnection(dbaddr, debug)
-		database := "enforcer_db"
-		createDatabase(database, debug)
-
-		tables = append(tables, "ipxe")
-		tables = append(tables, "agents")
-		tables = append(tables, "network12")
-		createTable(tables, debug)
-
-		if tls {
-			StartTlsServer(server)
-			if debug {
-				log.Println("Started tls-server:", addr)
-			}
-		} else {
-			StartServer(server)
-			if debug {
-				log.Println("Starting server:", addr)
-			}
-
+	// Get the command line args. We shortcut "--version" and "-v" to
+	// just show the version.
+	args := os.Args[1:]
+	for _, arg := range args {
+		if arg == "-v" || arg == "--version" {
+			newArgs := make([]string, len(args)+1)
+			newArgs[0] = "version"
+			copy(newArgs[1:], args)
+			args = newArgs
+			break
 		}
-
-	} else {
-		flag.PrintDefaults()
 	}
 
+	cli := &cli.CLI{
+		Args:     args,
+		Commands: Commands,
+		HelpFunc: cli.BasicHelpFunc("consul"),
+	}
+
+	exitCode, err := cli.Run()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error executing CLI: %s\n", err.Error())
+		return 1
+	}
+
+	return exitCode
 }
