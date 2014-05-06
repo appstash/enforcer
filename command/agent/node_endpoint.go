@@ -1,11 +1,12 @@
 package agent
 
 import (
-	"fmt"
-	"log"
+//	"fmt"
+//	"log"
 	"net/http"
 	"os"
-	"time"
+	r "github.com/dancannon/gorethink"
+//	"time"
 
 )
 
