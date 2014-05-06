@@ -20,54 +20,8 @@ var (
 	tags        = "nothing"
 )
 
-func createConnection(dbaddr string, debug bool) {
-	var err error
-	if os.Getenv("DB_PORT_28015_TCP_ADDR") != "" {
-		session, err = r.Connect(r.ConnectOpts{
-			Address:  os.Getenv("DB_PORT_28015_TCP_ADDR") + ":" + "28015",
-			Database: "enforcer_db",
-			})
-		if debug {
-			log.Println("Connecting to database via linked container:", os.Getenv("DB_PORT_28015_TCP_ADDR")+":"+"28015")
-		}
-	} else {
-		session, err = r.Connect(r.ConnectOpts{
-			Address:  dbaddr,
-			Database: "enforcer_db",
-			})
-		if debug {
-			log.Println("Connecting to datbase:", dbaddr)
-		}
-	}
 
-	if err != nil {
-		log.Fatalln(err.Error())
-	}
-}
 
-func createDatabase(database string, debug bool) {
-	// create database
-	_, err := r.DbCreate(database).Run(session)
-	if err != nil {
-		if debug {
-			log.Println(err.Error())
-		}
-	}
-}
-
-func createTable(tables []string, debug bool) {
-	for _, table := range tables {
-		response, err := r.Db("enforcer_db").TableCreate(table).Run(session)
-		if err != nil {
-			if debug {
-				log.Println(err.Error())
-			}
-		} else {
-			if debug {
-				log.Println(response)
-			}
-		}
-	}
 
 }
 func NewServer(addr string) *http.Server {
@@ -124,31 +78,6 @@ func initRouting() *mux.Router {
 
 // Handlers
 
-func indexHandler(w http.ResponseWriter, req *http.Request) {
-	instructions := []Machine{}
-
-	// Fetch all the items from the database
-	rows, err := r.Table(tableIpxe).OrderBy(r.Asc("Created")).Run(session)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	// Scan each row into a TodoItem instance and then add this to the list
-	for rows.Next() {
-		var instruction Machine
-
-		err := rows.Scan(&instruction)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		instructions = append(instructions, instruction)
-	}
-
-	renderHtml(w, "enforcer", instructions)
-}
 
 func getMemberHandler(w http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
@@ -498,112 +427,10 @@ func executeAgentHandler(w http.ResponseWriter, req *http.Request) {
 
 }
 
-func executeHandler(w http.ResponseWriter, req *http.Request) {
-	vars := mux.Vars(req)
-	id := vars["id"]
-	if id == "" {
-		http.NotFound(w, req)
-		return
-	}
 
-	// Check that the item exists
-	queryExistance := r.Table(tableIpxe)
-	queryExistance = queryExistance.Filter(r.Row.Field("id").Eq(id)).Filter(r.Row.Field("Status").Eq("AVAILABLE"))
-	res, err := queryExistance.RunRow(session)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 
-	if res.IsNil() {
-		http.NotFound(w, req)
-		return
-	}
 
-	instructions := []Machine{}
 
-	var instruction Machine
-	err = res.Scan(&instruction)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	instructions = append(instructions, instruction)
-
-	// Render template
-	renderTemplate(w, instruction.Template, instructions)
-
-	// Set status to installed
-	_, err = r.Table(tableIpxe).Get(id).Update(map[string]interface{}{"Status": "INSTALLED"}).RunWrite(session)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-}
-
-func toggleHandler(w http.ResponseWriter, req *http.Request) {
-	vars := mux.Vars(req)
-	id := vars["id"]
-	if id == "" {
-		http.NotFound(w, req)
-		return
-	}
-
-	// Check that the item exists
-	res, err := r.Table(tableIpxe).Get(id).RunRow(session)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	if res.IsNil() {
-		http.NotFound(w, req)
-		return
-	}
-
-	_, err = r.Table(tableIpxe).Get(id).Update(map[string]interface{}{"Status": r.Branch(
-		r.Row.Field("Status").Eq("AVAILABLE"),
-		"UNAVAILABLE",
-		"AVAILABLE",
-	)}).RunWrite(session)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	http.Redirect(w, req, "/", http.StatusFound)
-}
-
-func deleteHandler(w http.ResponseWriter, req *http.Request) {
-	vars := mux.Vars(req)
-	id := vars["id"]
-	if id == "" {
-		http.NotFound(w, req)
-		return
-	}
-
-	// Check that the item exists
-	res, err := r.Table(tableIpxe).Get(id).RunRow(session)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	if res.IsNil() {
-		http.NotFound(w, req)
-		return
-	}
-
-	// Delete the item
-	_, err = r.Table(tableIpxe).Get(id).Delete().RunWrite(session)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	http.Redirect(w, req, "/", http.StatusFound)
-}
 
 func deleteAgentHandler(w http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)

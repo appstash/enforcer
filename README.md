@@ -6,7 +6,7 @@ Enforcer acts as a webserver for ipxe configurations, a bootserver if you will. 
 
 #### How it should work.
 
-An ipxe is prepared for provisioning via tftp.
+An undionly.kpxe is prepared for provisioning via tftp. The same tool also create a compatible iso.
 Enforcer sets up a communication to an agent, for example serf or consul and activates the agents ipxe.
 The client machine is beeing booting requesting the prepared general ipxe.
 The client machine request locally the bootserver for the ipxe for its macaddress, if unsuccessful the agents ipxe and if no success go to a remote instance of Enforcer. If no success it boots to the local harddrive.
@@ -22,4 +22,4 @@ So far we can set up ipxe configurations manually. Setting up connections to age
 
 #### Tomorrow
 
-The new version of Enforcer drops the database and its driver as a dependency. There will be support for multiple agents that is able to speak a structurized language for communication such as json. Enforcer will have an api and the webapp will be a seperate client communicating over that api. It now focuses on working completely on small devices with raspberry pi to start of with. Now, RethinkDB has fully support for the pi but due to the resource usage we can drop by removing the database its worth it.
+The new version will have arm friendly database. There will be support for multiple agents that is able to speak a structurized language for communication such as json. Enforcer will have an api and the webapp will be a seperate client communicating over that api. It now focuses on working completely on small devices with raspberry pi to start of with.
