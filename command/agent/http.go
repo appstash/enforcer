@@ -76,3 +76,37 @@ func (s *HTTPServer) Handlers (enableDebug, bool) {
 		s.mux.HandleFunc("/v1/internal/ui/services", s.wrap(s.UIServices))
 	}
 }
+
+
+// wrap is used to wrap functions to make them more convenient
+func (s *HTTPServer) wrap(handler func(resp http.ResponseWriter, req *http.Request) (interface{}, error)) func(resp http.ResponseWriter, req *http.Request) {
+	f := func(resp http.ResponseWriter, req *http.Request) {
+		// Invoke the handler
+		start := time.Now()
+		defer func() {
+			s.logger.Printf("[DEBUG] http: Request %v (%v)", req.URL, time.Now().Sub(start))
+		}()
+		obj, err := handler(resp, req)
+
+		// Check for an error
+	HAS_ERR:
+		if err != nil {
+			s.logger.Printf("[ERR] http: Request %v, error: %v", req.URL, err)
+			resp.WriteHeader(500)
+			resp.Write([]byte(err.Error()))
+			return
+		}
+
+		// Write out the JSON object
+		if obj != nil {
+			var buf bytes.Buffer
+			enc := json.NewEncoder(&buf)
+			if err = enc.Encode(obj); err != nil {
+				goto HAS_ERR
+			}
+			resp.Header().Set("Content-Type", "application/json")
+			resp.Write(buf.Bytes())
+		}
+	}
+	return f
+}
