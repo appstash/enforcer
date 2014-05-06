@@ -54,8 +54,8 @@ func (s *HTTPServer) Handlers (enableDebug, bool) {
 
 	s.mux.HandleFunc("/v1/agent/members", s.wrap(s.AgentMembers))
 
-	s.mux.HandleFunc("/v1/ipxe/nodes"), s.wrap(s.IpxeNodes))
-	s.mux.HandleFunc("/v1/ipxe/{id}", s.wrap(s.IpxeId))
+	s.mux.HandleFunc("/v1/ipxe/nodes"), s.wrap(s.Nodes))
+	s.mux.HandleFunc("/v1/ipxe/{id}", s.wrap(s.NodeIpxe))
 
 
 	if enableDebug {
