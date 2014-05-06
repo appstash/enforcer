@@ -56,6 +56,7 @@ func (s *HTTPServer) Handlers (enableDebug, bool) {
 
 	s.mux.HandleFunc("/v1/ipxe/nodes"), s.wrap(s.Nodes))
 	s.mux.HandleFunc("/v1/ipxe/{id}", s.wrap(s.NodeIpxe))
+	s.mux.HandleFunc("/v1/ipxe/toggle", s.wrap(s.ToggleNode))
 
 
 	if enableDebug {
