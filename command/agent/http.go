@@ -110,3 +110,43 @@ func (s *HTTPServer) wrap(handler func(resp http.ResponseWriter, req *http.Reque
 	}
 	return f
 }
+
+// Renders a simple index page
+func (s *HTTPServer) Index(resp http.ResponseWriter, req *http.Request) {
+	// Check if this is a non-index path
+	if req.URL.Path != "/" {
+		resp.WriteHeader(404)
+		return
+	}
+
+	// Check if we have no UI configured
+	if s.uiDir == "" {
+		resp.Write([]byte("Consul Agent"))
+		return
+	}
+
+	// Redirect to the UI endpoint
+	http.Redirect(resp, req, "/ui/", 301)
+}
+
+// decodeBody is used to decode a JSON request body
+func decodeBody(req *http.Request, out interface{}, cb func(interface{}) error) error {
+	var raw interface{}
+	dec := json.NewDecoder(req.Body)
+	if err := dec.Decode(&raw); err != nil {
+		return err
+	}
+
+	// Invoke the callback prior to decode
+	if cb != nil {
+		if err := cb(raw); err != nil {
+			return err
+		}
+	}
+	return mapstructure.Decode(raw, out)
+}
+
+// setIndex is used to set the index response header
+func setIndex(resp http.ResponseWriter, index uint64) {
+	resp.Header().Add("X-Consul-Index", strconv.FormatUint(index, 10))
+}
