@@ -3,13 +3,11 @@ package agent
 import (
 	"fmt"
 	"github.com/hashicorp/consul/consul"
-	"github.com/hashicorp/consul/consul/structs"
 	"github.com/hashicorp/serf/serf"
 	"io"
 	"log"
 	"net"
 	"os"
-	"strconv"
 	"sync"
 )
 
