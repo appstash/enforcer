@@ -1,10 +1,18 @@
 package agent
 
 import (
-	"fmt"
+//	"fmt"
+	"bytes"
+	"encoding/json"
+	"github.com/mitchellh/mapstructure"
 	"net"
-	"os"
+	"net/http"
+	"net/http/pprof"
+//	"os"
 	"time"
+	"io"
+	"strconv"
+	"log"
 )
 
 // HTTPServer is used to wrap an Agent and expose various API's
@@ -14,11 +22,12 @@ type HTTPServer struct {
 	mux *http.ServeMux
 	listener net.Listener
 	logger *log.Logger
+	uiDir string
 }
 
 // NewHTTPServer starts a new HTTP server to provide an interface to
 // the agent.
-func NewHTTPServer(agent *Agent, enableDebug bool, logOutput io.Writer, bind string) (*HTTPServer, error) {
+func NewHTTPServer(agent *Agent, uiDir string, enableDebug bool, logOutput io.Writer, bind string) (*HTTPServer, error) {
 	// Create the mux.
 	mux := http.NewServeMux()
 
@@ -35,6 +44,7 @@ func NewHTTPServer(agent *Agent, enableDebug bool, logOutput io.Writer, bind str
 		mux:      mux,
 		listener: list,
 		logger:   log.New(logOutput, "", log.LstdFlags),
+		uiDir:	  uiDir,
 	}
 	srv.registerHandlers(enableDebug)
 
@@ -49,14 +59,14 @@ func (s *HTTPServer) Shutdown() {
 }
 
 
-func (s *HTTPServer) Handlers (enableDebug, bool) {
+func (s *HTTPServer) registerHandlers(enableDebug bool) {
 	s.mux.HandleFunc("/", s.Index)
 
-	s.mux.HandleFunc("/v1/agent/members", s.wrap(s.AgentMembers))
+	//s.mux.HandleFunc("/v1/agent/members", s.wrap(s.AgentMembers))
 
-	s.mux.HandleFunc("/v1/ipxe/nodes", s.wrap(s.Nodes))
-	s.mux.HandleFunc("/v1/ipxe/{id}", s.wrap(s.NodeIpxe))
-	s.mux.HandleFunc("/v1/ipxe/toggle", s.wrap(s.ToggleNode))
+	//s.mux.HandleFunc("/v1/ipxe/nodes", s.wrap(s.Nodes))
+	//s.mux.HandleFunc("/v1/ipxe/{id}", s.wrap(s.NodeIpxe))
+	//s.mux.HandleFunc("/v1/ipxe/toggle", s.wrap(s.ToggleNode))
 
 
 	if enableDebug {
@@ -72,9 +82,9 @@ func (s *HTTPServer) Handlers (enableDebug, bool) {
 		s.mux.Handle("/ui/", http.StripPrefix("/ui/", http.FileServer(http.Dir(s.uiDir))))
 
 		// API's are under /internal/ui/ to avoid conflict
-		s.mux.HandleFunc("/v1/internal/ui/nodes", s.wrap(s.UINodes))
+		/*s.mux.HandleFunc("/v1/internal/ui/nodes", s.wrap(s.UINodes))
 		s.mux.HandleFunc("/v1/internal/ui/node/", s.wrap(s.UINodeInfo))
-		s.mux.HandleFunc("/v1/internal/ui/services", s.wrap(s.UIServices))
+		s.mux.HandleFunc("/v1/internal/ui/services", s.wrap(s.UIServices))*/
 	}
 }
 

@@ -4,7 +4,7 @@ import (
 //	"fmt"
 //	"log"
 	"net/http"
-	"os"
+//	"os"
 	r "github.com/dancannon/gorethink"
 //	"time"
 

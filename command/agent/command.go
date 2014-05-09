@@ -29,7 +29,6 @@ type Command struct {
 	args       []string
 	logFilter  *logutils.LevelFilter
 	agent      *Agent
-	rpcServer  *AgentRPC
 	httpServer *HTTPServer
 }
 
@@ -41,12 +40,13 @@ func (c *Command) readConfig() *Config {
 	cmdFlags := flag.NewFlagSet("agent", flag.ContinueOnError)
 	cmdFlags.Usage = func() { c.Ui.Output(c.Help()) }
 
-	cmdFlags.Var((*AppendSliceValue)(&configFiles), "config-file", "json file to read config from")
-	cmdFlags.Var((*AppendSliceValue)(&configFiles), "config-dir", "directory of json files to read")
+	//cmdFlags.Var((*AppendSliceValue)(&configFiles), "config-file", "json file to read config from")
+	//cmdFlags.Var((*AppendSliceValue)(&configFiles), "config-dir", "directory of json files to read")
 
 	cmdFlags.StringVar(&cmdConfig.LogLevel, "log-level", "", "log level")
-	cmdFlags.StringVar(&cmdConfig.DataDir, "data-dir", "", "path to the data directory")
+	//cmdFlags.StringVar(&cmdConfig.DataDir, "data-dir", "", "path to the data directory")
 	cmdFlags.StringVar(&cmdConfig.UiDir, "ui-dir", "", "path to the web UI directory")
+	cmdFlags.StringVar(&cmdConfig.PidFile, "pid-file", "", "path to file to store PID")
 
 	cmdFlags.BoolVar(&cmdConfig.Server, "server", false, "run agent as server")
 
@@ -130,8 +130,8 @@ func (c *Command) setupAgent(config *Config, logOutput io.Writer, logWriter *log
 	}
 
 	// Start the IPC layer
-	c.Ui.Output("Starting Consul agent RPC...")
-	c.rpcServer = NewAgentRPC(agent, rpcListener, logOutput, logWriter)
+	//c.Ui.Output("Starting Consul agent RPC...")
+	//c.rpcServer = NewAgentRPC(agent, rpcListener, logOutput, logWriter)
 
 	if config.Ports.HTTP > 0 {
 		httpAddr, err := config.ClientListener(config.Ports.HTTP)
@@ -208,21 +208,17 @@ func (c *Command) Run(args []string) int {
 		return 1
 	}
 	defer c.agent.Shutdown()
-	if c.rpcServer != nil {
-		defer c.rpcServer.Shutdown()
-	}
+	//if c.rpcServer != nil {
+	//	defer c.rpcServer.Shutdown()
+	//}
 	if c.httpServer != nil {
 		defer c.httpServer.Shutdown()
 	}
 
-	// Let the agent know we've finished registration
-	c.agent.StartSync()
 
 	c.Ui.Output("Enforcer server running!")
-	c.Ui.Info(fmt.Sprintf("   Node name: '%s'", config.NodeName))
-	c.Ui.Info(fmt.Sprintf("      Server: %v (bootstrap: %v)", config.Server, config.Bootstrap))
 	c.Ui.Info(fmt.Sprintf(" Client Addr: %v (HTTP: %d, DNS: %d, RPC: %d)", config.ClientAddr,
-		config.Ports.HTTP, config.Ports.DNS, config.Ports.RPC))
+		config.Ports.HTTP, config.Ports.RPC))
 
 	// Enable log streaming
 	c.Ui.Info("")
@@ -291,6 +287,31 @@ WAIT:
 	case <-gracefulCh:
 		return 0
 	}
+}
+
+// handleReload is invoked when we should reload our configs, e.g. SIGHUP
+func (c *Command) handleReload(config *Config) *Config {
+	c.Ui.Output("Reloading configuration...")
+	newConf := c.readConfig()
+	if newConf == nil {
+		c.Ui.Error(fmt.Sprintf("Failed to reload configs"))
+		return config
+	}
+
+	// Change the log level
+	minLevel := logutils.LogLevel(strings.ToUpper(newConf.LogLevel))
+	if ValidateLevelFilter(minLevel, c.logFilter) {
+		c.logFilter.SetMinLevel(minLevel)
+	} else {
+		c.Ui.Error(fmt.Sprintf(
+			"Invalid log level: %s. Valid log levels are: %v",
+			minLevel, c.logFilter.Levels))
+
+		// Keep the current log level
+		newConf.LogLevel = config.LogLevel
+	}
+
+	return newConf
 }
 
 
