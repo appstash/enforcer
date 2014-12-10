@@ -1,8 +1,10 @@
-FROM pandrew/ubuntu-lts
+FROM ubuntu:trusty
 
 MAINTAINER Paul Andrew Liljenberg "letters@paulnotcom.se"
 
 RUN  apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
+    git-core \
+    curl \
     dpkg-sig \
     build-essential \
     mercurial \
